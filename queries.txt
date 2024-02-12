@@ -1,0 +1,127 @@
+query($name: String) {
+  queryRestaurant(
+    filter: {
+      name: {
+        allofterms: $name
+      }
+    }) {
+    id
+    name
+    cuisines(first: 100) {
+      name
+      id
+      dishes(first: 100) {
+        id 
+        name
+      }
+    }
+  }
+}
+
+query searchDish($name: String, $dishName: String, $restName: String) {
+  queryDish(
+    filter: {
+      name: {
+        allofterms: $dishName
+      }
+    }
+  ) {
+    id 
+    name
+    cuisine(filter:{
+      name: { eq: $name }
+    }) {
+      name
+      restaurants(filter: {
+        name: { allofterms: $restName }
+      }) {
+        id
+        name
+      }
+    }
+  }
+}
+
+query searchCuisine($name: String, $dishName: String, $restName: String) {
+  queryCuisine(
+    filter: {
+      name: {
+        eq:$name
+      }
+    }
+  ) {
+    id
+    name
+    restaurants(filter:{
+      name: {
+        allofterms: $restName
+      }
+    }) {
+      name
+    }
+    dishes (
+      filter: {
+        name: {
+          allofterms: $dishName
+        }
+      },
+      first: 100) {
+      name
+    }
+  }
+}
+
+query DqlQueryCuisine($name: string, $dishName: string, $restName: string) {
+  q(func: eq(Cuisine.name, $name)) {
+    uid
+    Cuisine.name
+    Cuisine.restaurants @filter(allofterms(Restaurant.name, $restName)){
+      Restaurant.name
+      uid
+    }
+    Cuisine.dishes @filter(allofterms(Dish.name, $dishName)) {
+      Dish.name
+      uid
+    }
+  }
+}
+
+query DqlQueryDish($name: string, $dishName: string, $restName: string) {
+  q(func: allofterms(Dish.name, $dishName)) {
+    uid
+    Dish.name
+    Dish.cuisines @filter(eq(Cuisine.name, $name)) {
+      uid
+      Cuisine.name
+      Cuisine.restaurants @filter(allofterms(Restaurant.name, $restName)) {
+        uid
+        Restaurant.name
+      }
+    }
+  }
+}
+
+query DqlQueryRestaurant($restName: string) {
+  qq(func: allofterms(Restaurant.name, $restName)) {
+    uid
+    Restaurant.name
+    Restaurant.cuisines (first: 100) {
+      uid
+      Cuisine.name
+      Cuisine.dishes (first: 100) {
+        Dish.name
+        uid
+      }
+    }
+  }
+}
+
+{
+  var(func: has(Dish.price)) {
+    a as Dish.price 
+  }
+  agg() {
+    average: avg(val(a))
+    sum: sum(val(a))
+  }
+}

@@ -2,7 +2,7 @@ query($name: String) {
   queryRestaurant(
     filter: {
       name: {
-        allofterms: $name
+        eq: $name
       }
     }) {
     id
@@ -22,7 +22,7 @@ query searchDish($name: String, $dishName: String, $restName: String) {
   queryDish(
     filter: {
       name: {
-        allofterms: $dishName
+        eq: $dishName
       }
     }
   ) {
@@ -33,7 +33,7 @@ query searchDish($name: String, $dishName: String, $restName: String) {
     }) {
       name
       restaurants(filter: {
-        name: { allofterms: $restName }
+        name: { eq: $restName }
       }) {
         id
         name
@@ -54,7 +54,7 @@ query searchCuisine($name: String, $dishName: String, $restName: String) {
     name
     restaurants(filter:{
       name: {
-        allofterms: $restName
+        eq: $restName
       }
     }) {
       name
@@ -62,7 +62,7 @@ query searchCuisine($name: String, $dishName: String, $restName: String) {
     dishes (
       filter: {
         name: {
-          allofterms: $dishName
+          eq: $dishName
         }
       },
       first: 100) {
@@ -72,14 +72,14 @@ query searchCuisine($name: String, $dishName: String, $restName: String) {
 }
 
 query DqlQueryCuisine($name: string, $dishName: string, $restName: string) {
-  q(func: eq(Cuisine.name, $name)) {
+  cuisines(func: eq(Cuisine.name, $name)) {
     uid
     Cuisine.name
-    Cuisine.restaurants @filter(allofterms(Restaurant.name, $restName)){
+    Cuisine.restaurants @filter(eq(Restaurant.name, $restName)){
       Restaurant.name
       uid
     }
-    Cuisine.dishes @filter(allofterms(Dish.name, $dishName)) {
+    Cuisine.dishes @filter(eq(Dish.name, $dishName)) {
       Dish.name
       uid
     }
@@ -87,13 +87,13 @@ query DqlQueryCuisine($name: string, $dishName: string, $restName: string) {
 }
 
 query DqlQueryDish($name: string, $dishName: string, $restName: string) {
-  q(func: allofterms(Dish.name, $dishName)) {
+  dishes(func: eq(Dish.name, $dishName)) {
     uid
     Dish.name
     Dish.cuisines @filter(eq(Cuisine.name, $name)) {
       uid
       Cuisine.name
-      Cuisine.restaurants @filter(allofterms(Restaurant.name, $restName)) {
+      Cuisine.restaurants @filter(eq(Restaurant.name, $restName)) {
         uid
         Restaurant.name
       }
@@ -102,7 +102,7 @@ query DqlQueryDish($name: string, $dishName: string, $restName: string) {
 }
 
 query DqlQueryRestaurant($restName: string) {
-  qq(func: allofterms(Restaurant.name, $restName)) {
+  restaurants(func: eq(Restaurant.name, $restName)) {
     uid
     Restaurant.name
     Restaurant.cuisines (first: 100) {

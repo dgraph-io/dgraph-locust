@@ -41,7 +41,7 @@ To start the query load-tests:
 locust -f locustfiles/query.py
 ```
 
-The Locust Web UI can be accessed at http://localhost:8080.  
+The Locust Web UI can be accessed at http://localhost:8089.  
 
 To start mutation load-tests:
 
@@ -49,7 +49,13 @@ To start mutation load-tests:
 locust -f locustfiles/mutation.py
 ```
 
-The mutation load-test example also demonstrates using a custom multi-stage load-shape. Launch the Web UI to see how the load-shape differs from the one used for queries. 
+To start a mixed-load test comprising of both queries and mutations:
+
+```
+locust -f locustfiles/mixed_load.py
+```
+
+
 
 ### Without WebUI:
 

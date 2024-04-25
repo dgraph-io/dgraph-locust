@@ -9,7 +9,7 @@ rest_ids = test_sample['rest_ids']
 cuisine_ids = test_sample['cuisine_ids']
 dish_ids = test_sample['dish_ids']
 
-mutation_file = os.path.abspath('queries.txt')
+mutation_file = os.path.abspath('mutations.txt')
 
 with open(mutation_file, 'r') as file:
     mutations = file.read().split('\n\n')  # Split queries by empty lines

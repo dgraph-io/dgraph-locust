@@ -9,7 +9,7 @@ from query_taskset import *
 
 class StartQueryTest(FastHttpUser): # Main Class to start Load-test using a TaskSet
     host = "http://localhost:8080"
-    wait_time = between(1, 5)
+    wait_time = between(0, 2)
     tasks = [QueryTaskSet]
 
     @events.init.add_listener
